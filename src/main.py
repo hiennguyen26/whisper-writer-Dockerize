@@ -32,6 +32,8 @@ class WhisperWriterApp(QObject):
         self.settings_window.settings_closed.connect(self.on_settings_closed)
         self.settings_window.settings_saved.connect(self.restart_app)
 
+        self.key_listener = None
+
         if ConfigManager.config_file_exists():
             self.initialize_components()
         else:
@@ -89,7 +91,7 @@ class WhisperWriterApp(QObject):
         self.tray_icon.show()
 
     def cleanup(self):
-        if self.key_listener:
+        if hasattr(self, 'key_listener') and self.key_listener:
             self.key_listener.stop()
         if self.input_simulator:
             self.input_simulator.cleanup()
